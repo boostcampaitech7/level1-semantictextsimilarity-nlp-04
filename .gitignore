@@ -6,3 +6,4 @@ ms/tb_logs
 .idea
 ms/model/__pycache__
 ms/utils/__pycache__
+requirements.txt
