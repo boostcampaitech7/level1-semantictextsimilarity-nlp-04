@@ -16,5 +16,14 @@ annotation: 문서쌍이 의미적으로 유사한지 주석
 원시데이터 출처:  Quora 질의 응답 웹사이트 커뮤니티  
 annotatiobn: 질문 쌍이 의미적으로 동일한지 주석  
 
+# Model
+
+## MT-DNN
+- https://y-rok.github.io/nlp/2019/05/20/mt-dnn.html  
+
+## XLNet
+- https://tech.scatterlab.co.kr/xlnet-review/  
+
+
 ### 참고자료
 https://paperswithcode.com/task/semantic-textual-similarity  
