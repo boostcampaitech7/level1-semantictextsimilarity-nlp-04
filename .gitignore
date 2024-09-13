@@ -1,0 +1,8 @@
+ms/data/raw
+ms/experiments
+ms/lightning_logs
+ms/output
+ms/tb_logs
+.idea
+ms/model/__pycache__
+ms/utils/__pycache__
