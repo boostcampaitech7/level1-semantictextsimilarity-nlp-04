@@ -1,6 +1,6 @@
-user_name: minseo # 실험자 이름
+user_name: sujin # 실험자 이름
 model:
-    model_name: team-lucid/deberta-v3-base-korean # 모델명
+    model_name: snunlp/KR-ELECTRA-discriminator # 모델명
 patience: 5
 train:
     batch_size: 32
