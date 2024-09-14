@@ -15,15 +15,9 @@ from model.model import Model
 
 ##############################
 
-
-if __name__ == "__main__":
-
-    # baseline_config 설정 불러오기
-    with open('./config/config.yaml', encoding='utf-8') as f:
-        CFG = yaml.load(f, Loader=yaml.FullLoader)
-
+def train(CFG: dict)-> None:
     # experiments 폴더 내부에 실험 폴더 생성
-    # 폴더 이름 : 실험 날짜 - 실험 시간 - user
+    # 폴더 이름 : 실험 날 - 실험 시간 - user
     experiment_path = utils.create_experiment_folder(CFG)
 
     # dataloader / model 설정
@@ -50,3 +44,12 @@ if __name__ == "__main__":
     # 학습된 모델 저장 (experiment_folder 안에 model.pt로 저장)
     torch.save(model, os.path.join(experiment_path, 'model.pt'))
     print(f"모델이 저장되었습니다: {experiment_path}")
+
+
+if __name__ == "__main__":
+
+    # baseline_config 설정 불러오기
+    with open('./config/config.yaml', encoding='utf-8') as f:
+        CFG = yaml.load(f, Loader=yaml.FullLoader)
+
+    train(CFG)
