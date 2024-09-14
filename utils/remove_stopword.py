@@ -1,16 +1,16 @@
 #%%
-def make_df():
+def make_df(data_path):
     '''
     :return: Pandas DataFrame
     '''
     df = pd.read_csv('data/file_name.csv')
     return df
 #%%
-def make_csv(df):
+def make_csv(df,data_path):
     '''
     :param df: DataFrame to be saved
     '''
-    df.to_csv('data/output_file_name.csv')
+    df.to_csv(data_path)
 #%%
 def custom_sentence(Sentence):
     '''
@@ -51,9 +51,3 @@ def remove_stopword(df, *col_list):
         df[col] = df[col].apply(custom_sentence)
 
     return df
-#%%
-train_df = make_df()
-#%%
-train_df = remove_stopword(train_df, 'sentence_1', 'sentence_2')
-#%%
-make_csv(train_df)
