@@ -7,19 +7,17 @@ from tqdm.auto import tqdm
 import torch
 #import transformers
 #import pandas as pd
-
+import re
 import pytorch_lightning as pl
 #import wandb
 ##############################
 from utils import data_pipeline
 
 
-
-if __name__ == '__main__':
-
-    # baseline_config 설정 불러오기
-    with open('./config/config.yaml', encoding='utf-8') as f:
-        CFG = yaml.load(f, Loader=yaml.FullLoader)
+def inference(CFG: dict)-> None:
+    # 변수명 지정
+    max_epochs = CFG['train']['max_epoch']
+    model_name = CFG['model']['model_name']
 
     # 저장된 폴더 이름
     exp_name = "09-13_11_minseo"
@@ -28,7 +26,8 @@ if __name__ == '__main__':
     # dataloader / model 설정
     dataloader = data_pipeline.Dataloader(CFG)
 
-    model = torch.load(f'./experiments/{exp_name}/model.pt')
+    saved_name = re.sub('/', '_', model_name)
+    model = torch.load(f'./experiments/{exp_name}/{saved_name}_{max_epochs}.pt')
 
     # trainer 인스턴스 생성
     trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=CFG['train']['max_epoch'], log_every_n_steps=1)
@@ -44,3 +43,10 @@ if __name__ == '__main__':
     output = pd.read_csv('./data/raw/sample_submission.csv')
     output['target'] = predictions
     output.to_csv(f'./output/output_({exp_name}).csv', index=False)
+
+if __name__ == '__main__':
+
+    # baseline_config 설정 불러오기
+    with open('./config/config.yaml', encoding='utf-8') as f:
+        CFG = yaml.load(f, Loader=yaml.FullLoader)
+    inference(CFG)
