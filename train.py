@@ -46,7 +46,7 @@ if __name__ == "__main__":
         )
 
     # trainer 인스턴스 생성
-    trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=CFG['train']['max_epoch'], log_every_n_steps=1, logger=logger)
+    trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=CFG['train']['max_epoch'], log_every_n_steps=1, logger=logger, callbacks=[early_stop_callback])
 
     # Train part
     trainer.fit(model=model, datamodule=dataloader)
