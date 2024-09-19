@@ -8,3 +8,4 @@ ms/model/__pycache__
 ms/utils/__pycache__
 requirements.txt
 .DS_Store
+/data
