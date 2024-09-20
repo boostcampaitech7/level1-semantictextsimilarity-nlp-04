@@ -1,0 +1,66 @@
+pwd: /data/ephemeral/home/sujin
+
+name: STS
+
+arch:
+  type: STSModel
+  args:
+    plm_name: snunlp/KR-ELECTRA-discriminator
+
+data_module:
+  type: DataModule
+  args:
+    plm_name: ${arch.args.plm_name}
+    dataset_name: STSDataset
+    batch_size: 16
+    shuffle: true
+    train_path: ${pwd}/data/train_02.csv
+    dev_path: ${pwd}/data/dev.csv
+    test_path: ${pwd}/data/dev.csv
+    predict_path: ${pwd}/data/test.csv
+    max_length: 160
+    col_info:
+      label: label
+      input: [sentence_1, sentence_2]
+
+optimizer:
+  type: AdamW
+  args:
+    lr: 0.00001  #sweep
+    weight_decay: 0 #sweep
+    amsgrad: true
+
+loss: l1_loss
+metrics: [pearson]
+
+lr_scheduler:
+  type: StepLR
+  args:
+    step_size: 50
+    gamma: 0.1
+
+trainer:
+  epochs: 15
+  save_dir: ${pwd}/saved/
+  mode: max
+
+wandb:
+  enable: true
+  project_name: snu-nlp-sweep
+  sweep_count: 10
+
+sweep_config:
+  method: bayes
+  metric:
+    name: val_pearson
+    goal: maximize
+  parameters:
+    lr:
+      distribution: uniform
+      min: 1e-5  # min 값을 더 작은 값으로 수정
+      max: 5e-5  # max 값을 더 큰 값으로 수정
+    batch_size:
+      values: [16,32]
+    weight_decay:
+      values: [0.4,0.5]
+

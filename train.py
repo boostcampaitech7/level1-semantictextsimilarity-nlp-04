@@ -1,65 +1,84 @@
-import argparse
-
-import yaml
 import os
-
 import torch
-# import transformers
-# import pandas as pd
+import numpy as np
+import base.base_data_loader as module_data
+import module.loss as module_loss
+import module.metric as module_metric
+import module.model as module_arch
+from module.trainer import Trainer
+from omegaconf import DictConfig, OmegaConf
+from utils import *
+import hydra
 
-import pytorch_lightning as pl
-from pytorch_lightning.loggers import TensorBoardLogger
-import re
-# import wandb
-##############################
-from utils import data_pipeline, utils
-from model.model import Model
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-##############################
-
-def train(CFG: dict)-> None:
-    # 변수명 지정
-    max_epochs = CFG['train']['max_epoch']
-    model_name = CFG['model']['model_name']
-    # experiments 폴더 내부에 실험 폴더 생성
-    # 폴더 이름 : 실험 날 - 실험 시간 - user
-    experiment_path = utils.create_experiment_folder(CFG)
-
-    # dataloader / model 설정
-    dataloader = data_pipeline.Dataloader(CFG)
-    model = Model(CFG)
-
-    # 텐서보드 테스트
-    logger = TensorBoardLogger("tb_logs", name="test1")
-
-    # trainer 인스턴스 생성
-    trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=max_epochs, log_every_n_steps=1, logger=logger)
-
-    # Train part
-    trainer.fit(model=model, datamodule=dataloader)
-    ## datamodule에서 train_dataloader와 val_dataloader를 호출
+# fix random seeds for reproducibility
+SEED = 123
+torch.manual_seed(SEED)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+np.random.seed(SEED)
 
 
-    ## Dataloader 내부에 val_dataloader 부분을 수정해서
-    ## valid set을 바꿀 수 있음
+@hydra.main(config_path=".", config_name="config", version_base=None)
+def main(cfg):
 
-    trainer.test(model=model, datamodule=dataloader)
+    # 0. DictConfig to dict
+    cfg.pwd = os.getcwd()
+    config = OmegaConf.to_container(cfg, resolve=True)
 
-    ## datamodule에서 test_dataloader 호출
-    ## predict_path로 설정된 test.csv가 사용된다
+    # 1. set data_module(=pl.DataModule class)
+    data_module = init_obj(
+        config["data_module"]["type"], config["data_module"]["args"], module_data
+    )
 
+    # 2. set model(=nn.Module class)
+    model = init_obj(config["arch"]["type"], config["arch"]["args"], module_arch)
 
-    saved_name = re.sub('/', '_', model_name)
+    # 3. set deivce(cpu or gpu)
+    # 장치 설정
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    model = model.to(device)
 
-    # 학습된 모델 저장 (experiment_folder 안에 model.pt로 저장)
-    torch.save(model, os.path.join(experiment_path, f'{saved_name}_{max_epochs}.pt'))
-    print(f"모델이 저장되었습니다: {experiment_path}")
+    # 4. set loss function & matrics
+    criterion = getattr(module_loss, config["loss"])
+    metrics = [getattr(module_metric, met) for met in config["metrics"]]
+
+    # 5. set optimizer & learning scheduler
+    trainable_params = filter(lambda p: p.requires_grad, model.parameters())
+    optimizer = init_obj(
+        config["optimizer"]["type"],
+        config["optimizer"]["args"],
+        torch.optim,
+        trainable_params,
+    )
+    lr_scheduler = init_obj(
+        config["lr_scheduler"]["type"],
+        config["lr_scheduler"]["args"],
+        torch.optim.lr_scheduler,
+        optimizer,
+    )
+
+    # 6. 위에서 설정한 내용들을 trainer에 넣는다.
+    trainer = Trainer(
+        model,
+        criterion,
+        metrics,
+        optimizer,
+        config=config,
+        device=device,
+        data_module=data_module,
+        lr_scheduler=lr_scheduler,
+    )
+
+    # 6. train
+    trainer.train()
 
 
 if __name__ == "__main__":
-
-    # baseline_config 설정 불러오기
-    with open('./config/config.yaml', encoding='utf-8') as f:
-        CFG = yaml.load(f, Loader=yaml.FullLoader)
-
-    train(CFG)
+    main()
