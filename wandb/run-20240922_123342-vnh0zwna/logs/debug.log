@@ -1,0 +1,28 @@
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Current SDK version is 0.18.1
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Configure stats pid to 33229
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Loading settings from /data/ephemeral/home/.config/wandb/settings
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Loading settings from /data/ephemeral/home/level1-semantictextsimilarity-nlp-04/wandb/settings
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Loading settings from environment variables: {}
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program_abspath': '/data/ephemeral/home/level1-semantictextsimilarity-nlp-04/train.py', 'program': '/data/ephemeral/home/level1-semantictextsimilarity-nlp-04/train.py'}
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:_log_setup():532] Logging user logs to /data/ephemeral/home/level1-semantictextsimilarity-nlp-04/wandb/run-20240922_123342-vnh0zwna/logs/debug.log
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:_log_setup():533] Logging internal logs to /data/ephemeral/home/level1-semantictextsimilarity-nlp-04/wandb/run-20240922_123342-vnh0zwna/logs/debug-internal.log
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:init():616] calling init triggers
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:init():623] wandb.init called with sweep_config: {}
+config: {'learning_rate': '1e-4', 'batch_size': 64, 'epoch': 20}
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:init():666] starting backend
+2024-09-22 12:33:42,970 INFO    MainThread:33229 [wandb_init.py:init():670] setting up manager
+2024-09-22 12:33:42,972 INFO    MainThread:33229 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-09-22 12:33:42,973 INFO    MainThread:33229 [wandb_init.py:init():678] backend started and connected
+2024-09-22 12:33:42,975 INFO    MainThread:33229 [wandb_init.py:init():773] updated telemetry
+2024-09-22 12:33:42,979 INFO    MainThread:33229 [wandb_init.py:init():806] communicating run to backend with 90.0 second timeout
+2024-09-22 12:33:43,363 INFO    MainThread:33229 [wandb_init.py:init():857] starting run threads in backend
+2024-09-22 12:33:43,465 INFO    MainThread:33229 [wandb_run.py:_console_start():2459] atexit reg
+2024-09-22 12:33:43,465 INFO    MainThread:33229 [wandb_run.py:_redirect():2307] redirect: wrap_raw
+2024-09-22 12:33:43,465 INFO    MainThread:33229 [wandb_run.py:_redirect():2372] Wrapping output streams.
+2024-09-22 12:33:43,465 INFO    MainThread:33229 [wandb_run.py:_redirect():2397] Redirects installed.
+2024-09-22 12:33:43,468 INFO    MainThread:33229 [wandb_init.py:init():900] run started, returning control to user process
+2024-09-22 12:33:46,499 INFO    MainThread:33229 [wandb_run.py:_config_callback():1388] config_cb None None {'CFG': {'user_name': 'seongmin', 'model': {'model_name': 'kykim/electra-kor-base'}, 'early_stopping': {'min_delta': 0.0, 'mode': 'max', 'monitor': 'val_pearson', 'patience': 5, 'verbose': False}, 'train': {'batch_size': 64, 'learning_rate': '1e-4', 'max_epoch': 20, 'LossF': 'torch.nn.MSELoss', 'optim': 'torch.optim.AdamW', 'shuffle': True}, 'data': {'train_path': './data/train.csv', 'dev_path': './data/dev.csv', 'test_path': './data/dev.csv', 'predict_path': './data/test.csv', 'checkpoint_path': './checkpoint/', 'output_path': './output/', 'submission_path': './data/sample_submission.csv', 'val_path': './data/dev.csv'}, 'seed': 42}}
+2024-09-22 12:36:02,165 INFO    MainThread:33229 [wandb_run.py:_config_callback():1388] config_cb None None {'CFG': {'user_name': 'seongmin', 'model': {'model_name': 'kykim/electra-kor-base'}, 'early_stopping': {'min_delta': 0.0, 'mode': 'max', 'monitor': 'val_pearson', 'patience': 5, 'verbose': False}, 'train': {'batch_size': 64, 'learning_rate': '1e-4', 'max_epoch': 20, 'LossF': 'torch.nn.MSELoss', 'optim': 'torch.optim.AdamW', 'shuffle': True}, 'data': {'train_path': './data/train.csv', 'dev_path': './data/dev.csv', 'test_path': './data/dev.csv', 'predict_path': './data/test.csv', 'checkpoint_path': './checkpoint/', 'output_path': './output/', 'submission_path': './data/sample_submission.csv', 'val_path': './data/dev.csv'}, 'seed': 42}}
+2024-09-22 12:36:25,127 WARNING MsgRouterThr:33229 [router.py:message_loop():77] message_loop has been closed

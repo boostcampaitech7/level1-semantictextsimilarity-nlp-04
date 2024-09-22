@@ -9,8 +9,9 @@ import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.loggers import WandbLogger
 
-# import wandb
+import wandb
 ##############################
 from utils import data_pipeline, utils
 from model.model import Model
@@ -33,7 +34,17 @@ if __name__ == "__main__":
     model = Model(CFG)
 
     # 텐서보드 테스트
-    logger = TensorBoardLogger("tb_logs", name="test1")
+    # logger = TensorBoardLogger("tb_logs", name="test1")
+
+    # WandB 초기화
+    wandb.init(project="wandb_logs", name='test3', config={
+        "learning_rate" : CFG['train']['learning_rate'],
+        "batch_size" : CFG['train']['batch_size'],
+        "epoch" : CFG['train']['max_epoch']
+    })  # 프로젝트 이름과 실험 이름 설정
+
+    # wandb 로그 설정
+    logger = WandbLogger(log_model='all')  # 모델 로그를 wandb에 기록
 
     # early_stopping 설정
     early_stop = CFG['early_stopping']

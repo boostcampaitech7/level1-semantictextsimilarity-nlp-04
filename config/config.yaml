@@ -8,9 +8,9 @@ early_stopping:
   patience: 5
   verbose: False
 train:
-  batch_size: 128
-  learning_rate: 2e-4
-  max_epoch: 10
+  batch_size: 64
+  learning_rate: 1e-4
+  max_epoch: 20
   LossF: torch.nn.MSELoss
   optim: torch.optim.AdamW
   ## LossF와 optim은 torch.nn과 torch.optim을 꼭 적어야 합니다
@@ -23,5 +23,5 @@ data:
   checkpoint_path: ./checkpoint/
   output_path: ./output/
   submission_path: ./data/sample_submission.csv
-  val_path: ./data_dev.csv
+  val_path: ./data/dev.csv
 seed: 42
