@@ -45,7 +45,7 @@ def check(text):
         return Checked(result=False)
 
     payload = {
-        "passportKey": "7aaf6ba001aa3586903ce815a5855334c4ca1766",
+        "passportKey": "d97f0b07208e9fd39556aee101e1a171867d6ab4",
         "color_blindness": "0",
         "q": text,
     }

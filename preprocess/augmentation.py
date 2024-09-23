@@ -13,12 +13,15 @@ from enum import Enum
 from typing import Union
 
 from soynlp.normalizer import emoticon_normalize, repeat_normalize
-from hanspell import spell_checker
+from hanspell import passportKey, spell_checker
 from konlpy.tag import Okt, Kkma
 
 import warnings
 
 warnings.filterwarnings("ignore")
+
+# passportKey 설정
+passportKey.init()
 
 
 class Augmentaion:
@@ -464,10 +467,10 @@ class Augmentaion:
 
 
 class Path(Enum):
-    TRAIN = "../data/train.csv"
-    DEV = "../data/dev.csv"
-    TEST = "../data/test.csv"
-    WORDNET = "../data/wordnet.pickle"
+    TRAIN = "../data/raw/train.csv"
+    DEV = "../data/raw/dev.csv"
+    TEST = "../data/raw/test.csv"
+    WORDNET = "./wordnet.pickle"
     SAVE = "../data/"
 
 

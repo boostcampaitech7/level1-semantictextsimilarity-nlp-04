@@ -4,7 +4,7 @@ import pickle
 import re
 
 wordnet = {}
-with open("./eda/wordnet.pickle", "rb") as f:
+with open("./wordnet.pickle", "rb") as f:
     wordnet = pickle.load(f)
 
 
