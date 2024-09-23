@@ -3,7 +3,7 @@ import torch
 from base import BaseTrainer
 from tqdm import tqdm
 import wandb
-
+import os
 
 class Trainer(BaseTrainer):
     """
@@ -97,9 +97,25 @@ class Trainer(BaseTrainer):
             self.save(epoch)
 
     def save(self, epoch):
-        torch.save({'epoch': epoch,
-                    'model_state_dict': self.model.state_dict(),
-                    'optimizer_state_dict': self.optimizer.state_dict(),
-                    'config': self.config,
-                    f'val_{self.config["metrics"][0]}': self.best_score,
-                    }, f"{self.save_file}_val_{self.config['metrics'][0]}={self.best_score}_ep_{epoch}.pth")
+        # torch.save({'epoch': epoch,
+        #             'model_state_dict': self.model.state_dict(),
+        #             'optimizer_state_dict': self.optimizer.state_dict(),
+        #             'config': self.config,
+        #             f'val_{self.config["metrics"][0]}': self.best_score,
+        #             }, f"{}/{self.save_file}_val_{self.config['metrics'][0]}={self.best_score}_ep_{epoch}.pth")
+        # Create a folder based on sweep ID or name (wandb.run.name or wandb.run.id)
+
+        sweep_folder = f"{wandb.run.name}"
+        os.makedirs(sweep_folder, exist_ok=True)  # Ensure the folder exists
+
+        # Save the model checkpoint with sweep-specific information
+        save_path = os.path.join(sweep_folder,
+                                 f"model_val_{self.config['metrics'][0]}={self.best_score}_ep_{epoch}.pth")
+
+        torch.save({
+            'epoch': epoch,
+            'model_state_dict': self.model.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'config': self.config,
+            f'val_{self.config["metrics"][0]}': self.best_score,
+        }, save_path)
