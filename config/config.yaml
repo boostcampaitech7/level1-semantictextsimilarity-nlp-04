@@ -16,12 +16,12 @@ train:
   ## LossF와 optim은 torch.nn과 torch.optim을 꼭 적어야 합니다
   shuffle: True
 data:
-  train_path: ./data/train.csv
-  dev_path: ./data/train.csv
-  test_path: ./data/train.csv
-  predict_path: ./data/train.csv
+  train_path: ./data/raw/train.csv
+  dev_path: ./data/raw/train.csv
+  test_path: ./data/raw/train.csv
+  predict_path: ./data/raw/train.csv
   checkpoint_path: ./checkpoint/
   output_path: ./output/
-  submission_path: ./data/sample_submission.csv
+  submission_path: ./data/raw/sample_submission.csv
   val_path: ./data_dev.csv
 seed: 42
