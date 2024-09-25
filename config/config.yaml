@@ -11,17 +11,28 @@ train:
   batch_size: 64
   learning_rate: 1e-4
   max_epoch: 20
+  dropout : 0.2
   LossF: torch.nn.MSELoss
   optim: torch.optim.AdamW
   ## LossF와 optim은 torch.nn과 torch.optim을 꼭 적어야 합니다
   shuffle: True
 data:
-  train_path: ./data/train.csv
-  dev_path: ./data/dev.csv
-  test_path: ./data/dev.csv
-  predict_path: ./data/test.csv
+  train_path: ./data/raw/train.csv
+  dev_path: ./data/raw/dev.csv
+  test_path: ./data/raw/dev.csv
+  predict_path: ./data/raw/test.csv
   checkpoint_path: ./checkpoint/
   output_path: ./output/
-  submission_path: ./data/sample_submission.csv
+  submission_path: ./data/raw/sample_submission.csv
   val_path: ./data/dev.csv
+# inference 설정
+inference:
+  model_file_name: # 파일명만 써주면 됨. 뒤에 .csv 같은 것도 안 붙여줘도 됨.
+    name_1:
+    name_2:
+  model_weight:
+    weight_1:
+    weight_2:
+  postprocessing_list: [False, False, False]
+  save_name: data # ensemble의 파일 저장명
 seed: 42

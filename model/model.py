@@ -1,4 +1,4 @@
-import torch
+import torch.nn as nn
 import transformers
 import torchmetrics
 import pytorch_lightning as pl
@@ -20,10 +20,12 @@ class Model(pl.LightningModule):
         ## CFG의 model_name으로 설정된 모델 불러오기
         self.plm = transformers.AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=self.model_name, num_labels=1)
+        self.dropout = nn.Dropout(CFG['train']['dropout'])
 
 
     def forward(self, x):
         x = self.plm(x)['logits']
+        x = self.dropout(x)
 
         return x
 
@@ -35,8 +37,15 @@ class Model(pl.LightningModule):
         # self.log("train_loss", loss)
 
         # 에포크 단위로 로그 기록
-        self.log("train_loss", loss, on_step=True, on_epoch=True)
-        self.log("train_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()), on_step=True, on_epoch=True)
+        self.log("loss/train", loss, on_step=True, on_epoch=True)
+        self.log("pearson/train", pearson, on_step=True, on_epoch=True)
+
+        # 가로축을 에포크 기반으로 설정
+        self.logger.experiment.add_scalar("loss/train_epoch", loss, self.current_epoch)
+        self.logger.experiment.add_scalar(
+            "pearson/train_epoch", pearson, self.current_epoch
+        )
+
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -48,8 +57,14 @@ class Model(pl.LightningModule):
         # self.log("val_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()))
 
         # 에포크 단위로 로그 기록
-        self.log("val_loss", loss, on_step=False, on_epoch=True)
-        self.log("val_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()), on_step=True, on_epoch=True)
+        self.log("loss/val", loss, on_step=False, on_epoch=True)
+        self.log("pearson/val", pearson, on_step=True, on_epoch=True)
+
+        # 가로축을 에포크 기반으로 설정
+        self.logger.experiment.add_scalar("loss/val_epoch", loss, self.current_epoch)
+        self.logger.experiment.add_scalar(
+            "pearson/val_epoch", pearson, self.current_epoch
+        )
 
         return loss
 
@@ -61,7 +76,12 @@ class Model(pl.LightningModule):
         # self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()))
 
         # 에포크 단위로 로그 기록
-        self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()), on_step=True, on_epoch=True)
+        self.log("pearson/test", pearson, on_step=True, on_epoch=True)
+
+        # 가로축을 에포크 기반으로 설정
+        self.logger.experiment.add_scalar(
+            "pearson/test_epoch", pearson, self.current_epoch
+        )
 
     def predict_step(self, batch, batch_idx):
         x = batch

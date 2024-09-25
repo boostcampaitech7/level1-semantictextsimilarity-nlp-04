@@ -1,6 +1,7 @@
 import argparse
 import yaml
 import os
+from datetime import datetime
 
 import torch
 # import transformers
@@ -37,11 +38,7 @@ if __name__ == "__main__":
     # logger = TensorBoardLogger("tb_logs", name="test1")
 
     # WandB 초기화
-    wandb.init(project="wandb_logs", name='test3', config={
-        "learning_rate" : CFG['train']['learning_rate'],
-        "batch_size" : CFG['train']['batch_size'],
-        "epoch" : CFG['train']['max_epoch']
-    })  # 프로젝트 이름과 실험 이름 설정
+    utils.wandb_init()
 
     # wandb 로그 설정
     logger = WandbLogger(log_model='all')  # 모델 로그를 wandb에 기록
