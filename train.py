@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # logger = TensorBoardLogger("tb_logs", name="test1")
 
     # WandB 초기화
-    utils.wandb_init()
+    utils.wandb_init(CFG)
 
     # wandb 로그 설정
     logger = WandbLogger(log_model='all')  # 모델 로그를 wandb에 기록

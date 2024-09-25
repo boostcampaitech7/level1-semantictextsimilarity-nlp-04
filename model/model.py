@@ -1,4 +1,4 @@
-import torch.nn as nn
+import torch
 import transformers
 import torchmetrics
 import pytorch_lightning as pl
@@ -20,7 +20,7 @@ class Model(pl.LightningModule):
         ## CFG의 model_name으로 설정된 모델 불러오기
         self.plm = transformers.AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=self.model_name, num_labels=1)
-        self.dropout = nn.Dropout(CFG['train']['dropout'])
+        self.dropout = torch.nn.Dropout(CFG['train']['dropout'])
 
 
     def forward(self, x):

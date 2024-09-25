@@ -1,9 +1,10 @@
 import os
 from datetime import datetime
+from typing import List
 
 import wandb
 import pandas as pd
-import json
+import re
 
 # 모델 저장 폴더
 def create_experiment_folder(CFG, base_path="./experiments"):
@@ -12,10 +13,11 @@ def create_experiment_folder(CFG, base_path="./experiments"):
 
     # admin 값을 가져와서 폴더 이름에 추가
     # user_name = CFG["user_name"]
-    model_name = CFG['model_name']
+    model_name = CFG["model"]["model_name"]
 
     # 월일_시간분_user_name 형식으로 폴더 이름 생성
     experiment_folder_name = f"{model_name}_{current_time}"
+    experiment_folder_name = re.sub('/', '_', experiment_folder_name)
 
     # experiments 경로에 해당 폴더 생성
     experiment_path = os.path.join(base_path, experiment_folder_name)
@@ -30,23 +32,23 @@ def wandb_init(CFG, base_path="./wandb"):
     current_time = datetime.now().strftime("%m%d_%H%M")
 
     # user_name = CFG['user_name']
+    wandb_name = f"{CFG['model']['model_name']}_{current_time}"
 
-    wandb_folder_name = f'{CFG['model']['model_name']}_{current_time}'
+    # wandb_folder_name = re.sub('/', '_', wandb_folder_name)
 
-    # wandB 저장 폴더 생성
-    wandb_path = os.path.join(base_path, wandb_folder_name)
-    os.makedirs(wandb_path, exist_ok=True)
+    # # wandB 저장 폴더 생성
+    # wandb_path = os.path.join(base_path, wandb_folder_name)
+    # os.makedirs(wandb_path, exist_ok=True)
+
+    # # wandB 저장 폴더 설정
+    # os.environ["WANDB_DIR"] = wandb_path
 
     # WandB 초기화
-    wandb.init(project="wandb_logs", name=wandb_folder_name, config={
-        "learning_rate" : CFG['train']['learning_rate'],
-        "batch_size" : CFG['train']['batch_size'],
-        "epoch" : CFG['train']['max_epoch']
+    wandb.init(project="wandb_logs", name=wandb_name, config={
+        "learning_rate" : CFG["train"]["learning_rate"],
+        "batch_size" : CFG["train"]["batch_size"],
+        "epoch" : CFG["train"]["max_epoch"]
     })  # 프로젝트 이름과 실험 이름 설정
-
-    # wandB 저장 폴더 설정
-    os.environ['WANDB_DIR'] = wandb_path
-
 
 
 # 후처리
@@ -59,11 +61,10 @@ def postprocessing(df:pd.DataFrame) -> pd.DataFrame:
 
 # score_list, path_list
 def score_path(CFG):
-    path = './output/ensemble/'
 
     path_list = []
-    for i in range(1, len(CFG['model_file_name'])+1):
-        path_list.append(path + CFG['model_path'][f'path_{i}'] + '.csv')
+    for i in range(1, len(CFG['model_path'])+1):
+        path_list.append(CFG['model_path'][f'path_{i}'])
     
     score_list = []
     for i in range(1, len(CFG['model_weight'])+1):

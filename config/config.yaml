@@ -8,9 +8,9 @@ early_stopping:
   patience: 5
   verbose: False
 train:
-  batch_size: 64
-  learning_rate: 1e-4
-  max_epoch: 20
+  batch_size: 32
+  learning_rate: 5e-4
+  max_epoch: 1
   dropout : 0.2
   LossF: torch.nn.MSELoss
   optim: torch.optim.AdamW
@@ -24,15 +24,17 @@ data:
   checkpoint_path: ./checkpoint/
   output_path: ./output/
   submission_path: ./data/raw/sample_submission.csv
-  val_path: ./data/dev.csv
+  val_path: ./data/raw/dev.csv
 # inference 설정
 inference:
-  model_file_name: # 파일명만 써주면 됨. 뒤에 .csv 같은 것도 안 붙여줘도 됨.
-    name_1:
-    name_2:
+  model_file_name: 0924_0643_seongmin
+  model_path:
+    path_1: output_(0923_0746_seongmin)
+    path_2: output_(0923_0849_seongmin)
   model_weight:
-    weight_1:
-    weight_2:
+    weight_1: 0.8
+    weight_2: 0.9
   postprocessing_list: [False, False, False]
   save_name: data # ensemble의 파일 저장명
+wandb_log_folder: run-20240923_085002-wkvfq5sl
 seed: 42

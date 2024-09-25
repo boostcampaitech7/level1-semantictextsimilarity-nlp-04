@@ -29,9 +29,9 @@ if __name__ == '__main__':
         CFG = yaml.load(f, Loader=yaml.FullLoader)
 
     # inference
-    if args.mode == 'inference':
+    if args.mode == "inference":
         # 저장된 폴더 이름
-        exp_name = CFG['inference']['model_file_name']['name_1']
+        exp_name = CFG["inference"]["model_file_name"]
 
         # dataloader / model 설정
         dataloader = data_pipeline.Dataloader(CFG)
