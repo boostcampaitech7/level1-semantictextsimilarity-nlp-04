@@ -1,0 +1,15 @@
+
+lightning_logs/
+__pycache__/
+data/._*
+data/.gitkeep
+data/data.tar.gz
+data/dev.csv
+data/test.csv
+data/train.csv
+data/train_01_swap.csv
+model/
+result/
+wandb/
+level1-semantictextsimilarity-nlp-04/
+data/
