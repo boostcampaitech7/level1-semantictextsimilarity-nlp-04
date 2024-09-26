@@ -1,6 +1,7 @@
 import argparse
 import yaml
 import os
+from datetime import datetime
 
 import torch
 # import transformers
@@ -9,8 +10,9 @@ import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.loggers import WandbLogger
 
-# import wandb
+import wandb
 ##############################
 from utils import data_pipeline, utils
 from model.model import Model
@@ -33,7 +35,13 @@ if __name__ == "__main__":
     model = Model(CFG)
 
     # 텐서보드 테스트
-    logger = TensorBoardLogger("tb_logs", name="test1")
+    # logger = TensorBoardLogger("tb_logs", name="test1")
+
+    # WandB 초기화
+    utils.wandb_init(CFG)
+
+    # wandb 로그 설정
+    logger = WandbLogger(log_model='all')  # 모델 로그를 wandb에 기록
 
     # early_stopping 설정
     early_stop = CFG['early_stopping']
@@ -46,7 +54,7 @@ if __name__ == "__main__":
         )
 
     # trainer 인스턴스 생성
-    trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=CFG['train']['max_epoch'], log_every_n_steps=1, logger=logger)
+    trainer = pl.Trainer(accelerator="gpu", devices=1, max_epochs=CFG['train']['max_epoch'], log_every_n_steps=1, logger=logger, callbacks=[early_stop_callback])
 
     # Train part
     trainer.fit(model=model, datamodule=dataloader)
