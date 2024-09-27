@@ -26,6 +26,9 @@ if __name__ == "__main__":
     with open('./config/config.yaml', encoding='utf-8') as f:
         CFG = yaml.load(f, Loader=yaml.FullLoader)
 
+    # 시드 고정
+    utils.seed_fix(CFG["seed"])
+
     # experiments 폴더 내부에 실험 폴더 생성
     # 폴더 이름 : 실험 날짜 - 실험 시간 - user
     experiment_path = utils.create_experiment_folder(CFG)

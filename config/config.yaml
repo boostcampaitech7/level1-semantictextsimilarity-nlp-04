@@ -6,7 +6,7 @@ model:
 early_stopping:
   min_delta: 0.0
   mode: max
-  monitor: pearson/val
+  monitor: val_pearson
   patience: 3
   verbose: False
 
@@ -40,7 +40,7 @@ inference:
     path_1: ./output/3peo_v4 + yeseo(7 model).csv
     path_2: ./output/ensemble_09_24_01_48.csv
     path_3: ./output/ensemble.csv
-    path_3: ./output/weighted_voting_result.csv
+    path_4: ./output/weighted_voting_result.csv
   model_weight: # 모델별 가중치
     weight_1: 0.5
     weight_2: 0.5

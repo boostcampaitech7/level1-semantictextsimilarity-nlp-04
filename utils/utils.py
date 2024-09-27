@@ -1,10 +1,24 @@
 import os
+import random
 from datetime import datetime
 from typing import List
 
 import wandb
+import torch
 import pandas as pd
+import numpy as np
 import re
+
+
+# 시드 고정
+def seed_fix(SEED=42):
+    random.seed(SEED)
+    np.random.seed(SEED)
+    torch.manual_seed(SEED)
+    torch.cuda.manual_seed_all(SEED)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = True
+
 
 # 모델 저장 폴더
 def create_experiment_folder(CFG, base_path="./experiments"):
